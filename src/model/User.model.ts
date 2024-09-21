@@ -1,9 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
-
-export interface Message extends Document {
-  content: string;
-  createdAt: Date;
-}
+import mongoose, { Schema } from "mongoose";
+import { Message, User } from "@/types/ApiResponse";
 
 const MessageSchema: Schema<Message> = new Schema({
   content: {
@@ -16,17 +12,6 @@ const MessageSchema: Schema<Message> = new Schema({
     default: Date.now,
   },
 });
-
-interface User extends Document {
-  username: string;
-  email: string;
-  password: string;
-  verifyCode: string;
-  verifyCodeExpire: Date;
-  isVerified: boolean;
-  isAcceptingMessage: boolean;
-  messages: Message[];
-}
 
 const userSchema: Schema<User> = new Schema({
   username: {
