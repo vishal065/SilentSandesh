@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const UsernameValidator = z
+export const UsernameSchema = z
   .string()
   .toLowerCase()
   .min(3, { message: "username should be at least 3 character" })
@@ -10,7 +10,7 @@ const UsernameValidator = z
   });
 
 export const signupValidator = z.object({
-  username: UsernameValidator,
+  username: UsernameSchema,
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()

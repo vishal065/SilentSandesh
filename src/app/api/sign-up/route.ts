@@ -13,8 +13,12 @@ export async function POST(req: Request) {
       username,
       isVerified: true,
     });
+    console.log(existingUserVerifiedByUsername);
 
-    if (existingUserVerifiedByUsername) {
+    if (
+      existingUserVerifiedByUsername &&
+      existingUserVerifiedByUsername.length > 0
+    ) {
       return Response.json({
         status: 400,
         success: false,
