@@ -12,7 +12,7 @@ export interface User extends Document {
   verifyCode: string;
   verifyCodeExpire: Date;
   isVerified: boolean;
-  isAcceptingMessage: boolean;
+  isAcceptingMessages: boolean;
   messages: Message[];
 }
 
@@ -20,6 +20,6 @@ export interface ApiResponse {
   status?: number;
   success: boolean;
   message: string;
-  isAcceptingMessage?: boolean;
+  isAcceptingMessages?: boolean;
   messages?: Array<Message>;
 }

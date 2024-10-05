@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         { status: 404 }
       );
     }
-    if (user.isAcceptingMessage === false) {
+    if (user.isAcceptingMessages === false) {
       return Response.json(
         { success: true, message: "user is not accepting messages" },
         { status: 403 }

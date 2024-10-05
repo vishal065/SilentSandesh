@@ -45,7 +45,7 @@ function Page() {
         description: response.data.message,
         variant: "default",
       });
-      router.replace(``)
+      router.replace(`/sign-in`);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({

@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         verifyCode,
         verifyCodeExpire: expireDate,
         isVerified: false,
-        isAcceptingMessage: true,
+        isAcceptingMessages: true,
         messages: [],
       });
       await newUser.save();
@@ -68,6 +68,8 @@ export async function POST(req: Request) {
       username,
       verifyCode
     );
+    console.log(emailResponse);
+    
     if (!emailResponse.success) {
       return Response.json({
         status: 500,

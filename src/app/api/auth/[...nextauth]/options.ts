@@ -12,11 +12,12 @@ export const authOptions: NextAuthOptions = {
       id: "credentials",
       name: "Credentails",
       credentials: {
-        email: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any): Promise<any> {
         await dbConnect();
+
         try {
           const user = await UserModel.findOne({
             $or: [
@@ -45,10 +46,10 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (token) {
+      if (user) {
         token._id = user._id?.toString();
         token.isVerified = user?.isVerified;
-        token.isAcceptingMessage = user.isAcceptingMessage;
+        token.isAcceptingMessages = user.isAcceptingMessages;
         token.username = user.username;
       }
       return token;
@@ -57,9 +58,10 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
-        session.user.isAcceptingMessage = token.isAcceptingMessage;
+        session.user.isAcceptingMessages = token.isAcceptingMessages;
         session.user.username = token.username;
       }
+
       return session;
     },
   },

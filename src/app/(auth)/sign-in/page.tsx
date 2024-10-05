@@ -20,8 +20,10 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const Page = () => {
-  const [isSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
+
   const signInForm = useForm<z.infer<typeof signInValidator>>({
     resolver: zodResolver(signInValidator),
     defaultValues: {
@@ -30,14 +32,15 @@ const Page = () => {
     },
   });
   const onSubmit = async (data: z.infer<typeof signInValidator>) => {
-    // setIsSubmitting(true);
+    setIsSubmitting(true);
     const response = await signIn("credentials", {
       redirect: false,
       identifier: data.identifier,
       password: data.password,
     });
-    console.log(response);
+    console.log("response", response);
     if (response?.error) {
+      setIsSubmitting(false);
       if (response.error === "CredentialsSignIn") {
         toast({
           title: "Login Failed",
@@ -45,6 +48,7 @@ const Page = () => {
           variant: "destructive",
         });
       } else {
+        setIsSubmitting(false);
         toast({
           title: "Login Failed Error",
           description: response.error,
@@ -53,7 +57,9 @@ const Page = () => {
       }
     }
     if (response?.url) {
+      setIsSubmitting(false);
       router.replace(`/dashboard`);
+      
     }
   };
   return (
