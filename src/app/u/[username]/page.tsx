@@ -15,16 +15,14 @@ const Page = () => {
     setLoading(true);
     try {
       const response = await axios.get<ApiResponse>(`/api/suggest-message`);
-      console.log("response",response);
-      // console.log("response data", response.data);
 
-      setSuggestedMessage(response?.data.suggestedMessage as string);
+      setSuggestedMessage(response?.data.data as string);
     } catch (error) {
     } finally {
       setLoading(false);
     }
   };
-  // console.log(suggestMessage);
+  console.log(suggestMessage);
 
   return (
     <div className="flex flex-col items-start justify-center mt-10 lg:mx-auto p-6  w-full max-w-6xl">

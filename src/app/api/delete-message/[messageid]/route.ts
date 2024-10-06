@@ -14,7 +14,7 @@ export async function DELETE(
   const session = await getServerSession(authOptions);
   const user = session?.user as User;
   if (!session || !user) {
-    apiResponse(false, "Not Authenticated", 400);
+    return apiResponse(false, "Not Authenticated", 400);
   }
   try {
     const DeletedMessage = await UserModel.updateOne(
@@ -22,9 +22,9 @@ export async function DELETE(
       { $pull: { _id: messageID } }
     );
     if (DeletedMessage.modifiedCount === 0) {
-      apiResponse(false, "Failed to delete message", 400);
+       return apiResponse(false, "Failed to delete message", 400);
     }
-    apiResponse(true, "Deleted message successfully", 200);
+    return apiResponse(true, "Deleted message successfully", 200);
   } catch (error) {
     apiError(false, "Failed to delete message", 500);
   }
