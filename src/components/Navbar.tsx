@@ -19,9 +19,14 @@ const Navbar = () => {
         {session && status === "authenticated" ? (
           <>
             <span className="mr-4">Welcome, {user.username || user.email}</span>
-            <Button className="w-full md:w-auto" onClick={() => signOut()}>
-              Logout
-            </Button>
+            <div className=" space-x-5">
+              <Link href={`/my-dashboard`}>
+                <Button className="w-full md:w-auto">Dashboard</Button>
+              </Link>
+              <Button className="w-full md:w-auto" onClick={() => signOut()}>
+                Logout
+              </Button>
+            </div>
           </>
         ) : (
           <Link href={`/sign-in`}>

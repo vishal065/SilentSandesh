@@ -1,10 +1,12 @@
 // import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import apiResponse from "@/helpers/apiResponse";
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 
-export default async function GET() {
+export async function GET() {
   try {
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY!;
+    console.log("apiKey", apiKey);
 
     if (!apiKey) {
       throw new Error(
@@ -17,10 +19,12 @@ export default async function GET() {
     const model = google("gemini-1.5-pro-latest");
     const text = await generateText({
       model,
-      prompt ,
+      prompt,
       maxTokens: 150,
     });
+    console.log(text.text);
 
+    // apiResponse(true, "few suggested message", 200, text.text);
     Response.json({ text: text.text }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {

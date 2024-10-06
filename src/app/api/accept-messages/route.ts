@@ -16,16 +16,18 @@ export async function POST(request: Request) {
     );
   }
 
-  const userId = user._id;
   const { acceptMessages } = await request.json();
+
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(
-      userId,
+      user._id,
       {
         isAcceptingMessages: acceptMessages,
       },
       { new: true }
     );
+    console.log(updatedUser);
+
     if (!updatedUser) {
       return Response.json(
         {
@@ -52,32 +54,35 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-  // try {
-  //   const dbUser = await UserModel.findOne({ _id: user._id });
-  //   if (!dbUser) {
-  //     return Response.json(
-  //       { success: false, message: "User not found" },
-  //       { status: 400 }
-  //     );
-  //   }
-  //   dbUser.isAcceptingMessages = !dbUser.isAcceptingMessages;
-  //   await dbUser.save();
-  // } catch (error) {
-  //   return Response.json(
-  //     { success: false, message: "failed to update status" },
-  //     { status: 500 }
-  //   );
-  // }
+
+  //  try {
+  //    const dbUser = await UserModel.findOne({ _id: user._id });
+  //    if (!dbUser) {
+  //      return Response.json(
+  //        { success: false, message: "User not found" },
+  //        { status: 400 }
+  //      );
+  //    }
+  //    dbUser.isAcceptingMessages = !dbUser.isAcceptingMessages;
+  //    await dbUser.save();
+  //  } catch (error) {
+  //    return Response.json(
+  //      { success: false, message: "failed to update status" },
+  //      { status: 500 }
+  //    );
+  //  }
 }
 
 export const GET = async () => {
   await dbConnect();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const user = session?.user;
+
   if (!session || !user) {
-    return apiError(false, "Not authenticated !!", 400);
+    return apiError(false, "Not authenticated !!", 401);
   }
-  const userID = user._id;
+
+  const userID = user?._id || "";
   try {
     const user = await UserModel.findById(userID);
     if (!user) {

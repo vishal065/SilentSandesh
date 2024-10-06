@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
+import messageServices from "@/services/messagesServices";
 import { ApiResponse, Message } from "@/types/ApiResponse";
 import { acceptMessageValidator } from "@/Validations/acceptMessageValidator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { Loader2, RefreshCcw } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
@@ -18,14 +19,21 @@ const Page = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [Loading, setLoading] = useState(false);
-  console.log("dawdawd");
+  const [baseURL, setBaseURL] = useState("");
+  // const []
 
   const form = useForm({ resolver: zodResolver(acceptMessageValidator) });
   const { register, watch, setValue } = form;
 
   const { data: session } = useSession();
+  // Just a slight correction. It is Object destructuring with renaming. So data.user would also be fine if not renamed.
+  const { username } = (session?.user as User) || {};
 
   const acceptMessages = watch("acceptMessages");
+
+  console.log(acceptMessages);
+
+  // -------------- delete messages -------------------
 
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages?.filter((message) => message._id !== messageId));
@@ -34,10 +42,11 @@ const Page = () => {
   const fetchAcceptMessage = useCallback(async () => {
     setIsSwitchLoading(true);
     try {
-      const response = await axios.get<ApiResponse>(`api/accept-messages`);
-      setValue("acceptMessages", response.data.isAcceptingMessages);
+      const response = await messageServices.isAcceptMessages();
+      setValue("acceptMessages", response?.data);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
+
       toast({
         title: "Error",
         description:
@@ -49,12 +58,14 @@ const Page = () => {
     }
   }, [setValue]);
 
+  // -------------- get all messages ----------------
+
   const fetchMessages = useCallback(
     async (refesh: boolean = false) => {
       setLoading(true);
       setIsSwitchLoading(true);
       try {
-        const response = await axios.get<ApiResponse>(`api/get-messages`);
+        const response = await messageServices.getAllMessages();
         setMessages(response.data?.messages as Message[]);
         if (refesh) {
           toast({
@@ -64,6 +75,7 @@ const Page = () => {
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
+
         toast({
           title: "Error",
           description:
@@ -78,11 +90,14 @@ const Page = () => {
     [setLoading, setMessages]
   );
 
-  //handle switch change
+  // -------------- user switch accepting messages ----------------
+
   const handleSwitchChange = async () => {
     try {
-      const response = await axios.post<ApiResponse>(`/api/accept-messages`, {
-        isAcceptingMessages: acceptMessages,
+      console.log("acceptMessages", acceptMessages);
+
+      const response = await messageServices.switchAcceptMessages({
+        acceptMessages: !acceptMessages,
       });
       setValue("acceptMessages", !acceptMessages);
       toast({ title: response.data?.message, variant: "default" });
@@ -96,11 +111,9 @@ const Page = () => {
     }
   };
 
-  const { username } = session?.user as User;
+  // ----------- copy unique link -----------
 
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-
-  const ProfileUrl = `${baseUrl}/u/${username}`;
+  const ProfileUrl = `${baseURL}/u/${username}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ProfileUrl);
@@ -110,11 +123,14 @@ const Page = () => {
     });
   };
 
+  // -------------- useeffect ----------------
+
   useEffect(() => {
     if (!session || !session.user) return;
 
     fetchMessages();
     fetchAcceptMessage();
+    setBaseURL(`${window.location.protocol}//${window.location.host}`);
   }, [session, setValue, fetchAcceptMessage, fetchMessages]);
 
   if (!session || !session.user) {
@@ -131,7 +147,7 @@ const Page = () => {
             type="text"
             value={ProfileUrl}
             disabled
-            className="input input-bordered w-full p-2 mr-2"
+            className="input input-bordered outline w-full p-2 mr-2"
           />
           <Button onClick={copyToClipboard}>Copy</Button>
         </div>

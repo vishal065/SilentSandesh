@@ -58,8 +58,7 @@ const Page = () => {
     }
     if (response?.url) {
       setIsSubmitting(false);
-      router.replace(`/dashboard`);
-      
+      router.replace(`/my-dashboard`);
     }
   };
   return (
