@@ -38,7 +38,6 @@ const Page = () => {
       identifier: data.identifier,
       password: data.password,
     });
-    console.log("response", response);
     if (response?.error) {
       setIsSubmitting(false);
       if (response.error === "CredentialsSignIn") {

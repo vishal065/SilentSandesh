@@ -1,11 +1,4 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,8 +22,6 @@ type MessageCardProps = {
 };
 
 const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
-
-  
   const handleDelete = async () => {
     const response = await axios.delete<ApiResponse>(
       `/api/delete-message/${message?._id}`
@@ -40,13 +31,16 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Card Title</CardTitle>
+    <Card className="border p-5 w-full rounded-lg relative">
+      <CardHeader className="">
+        <CardTitle className="text-wrap">{message.content}</CardTitle>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive">
-              <X className="w-5 h-5" />
+            <Button
+              className="w-12 h-10 place-self-end absolute top-4 mx-auto "
+              variant="destructive"
+            >
+              <X className="w-7 h-7" />
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -65,7 +59,6 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <CardDescription>Card Description</CardDescription>
       </CardHeader>
       <CardContent></CardContent>
     </Card>

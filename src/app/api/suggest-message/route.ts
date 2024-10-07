@@ -1,31 +1,56 @@
 // import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import apiResponse from "@/helpers/apiResponse";
+// import apiResponse from "@/helpers/apiResponse";
 import { google } from "@ai-sdk/google";
-import { generateText } from "ai";
+import { streamText } from "ai";
 
 export async function GET() {
   try {
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY!;
-    console.log("apiKey", apiKey);
 
     if (!apiKey) {
       throw new Error(
         "API key is missing. Set it as GOOGLE_GENERATIVE_AI_API_KEY."
       );
     }
-    const prompt =
-      "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
+    const randomNumber = Math.floor(100000 + Math.random() * 900000);
+
+    const prompt = `Create a list of three random open-ended and engaging questions randomness depend on this number ${randomNumber} formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment. `;
 
     const model = google("gemini-1.0-pro-latest");
-    const text = await generateText({
+    // const text = await generateText({
+    //   model,
+    //   prompt,
+    //   maxTokens: 150,
+    // });
+    // console.log(text.text);
+
+    const result = await streamText({
       model,
       prompt,
-      maxTokens: 150,
+      maxTokens: 200,
     });
-    console.log(text.text);
 
-    return apiResponse(true, "few suggested message", 200, text.text);
-  //  return Response.json({ text: text.text }, { status: 200 });
+    const stream = new ReadableStream({
+      async start(controller) {
+        for await (const textPart of result.textStream) {
+          const encoder = new TextEncoder();
+          const chunk = encoder.encode(textPart);
+          controller.enqueue(chunk);
+        }
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/plain",
+        "Cache-Control": "no-cache",
+        "Transfer-Encoding": "chunked",
+      },
+    });
+
+    // return apiResponse(true, "few suggested message", 200, text.text);
+    //  return Response.json({ text: text.text }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       Response.json({ error: error.message }, { status: 500 });

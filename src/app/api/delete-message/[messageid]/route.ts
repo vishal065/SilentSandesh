@@ -17,15 +17,19 @@ export async function DELETE(
     return apiResponse(false, "Not Authenticated", 400);
   }
   try {
+    console.log("messageID", messageID);
+
     const DeletedMessage = await UserModel.updateOne(
       { _id: user._id },
-      { $pull: { _id: messageID } }
+      { $pull: { messages: { _id: messageID } } }
     );
     if (DeletedMessage.modifiedCount === 0) {
-       return apiResponse(false, "Failed to delete message", 400);
+      return apiResponse(false, "Failed to delete message", 400);
     }
     return apiResponse(true, "Deleted message successfully", 200);
   } catch (error) {
+    console.log(error);
+
     apiError(false, "Failed to delete message", 500);
   }
 }
