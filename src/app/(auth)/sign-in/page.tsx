@@ -12,15 +12,16 @@ import { toast } from "@/hooks/use-toast";
 import { signInValidator } from "@/Validations/signInValidator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const Page = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session, status } = useSession();
 
   const router = useRouter();
 
@@ -31,6 +32,7 @@ const Page = () => {
       password: "",
     },
   });
+
   const onSubmit = async (data: z.infer<typeof signInValidator>) => {
     setIsSubmitting(true);
     const response = await signIn("credentials", {
@@ -60,6 +62,13 @@ const Page = () => {
       router.replace(`/my-dashboard`);
     }
   };
+
+  useEffect(() => {
+    if (!session === null && status == "authenticated") {
+      router.replace(`/my-dashboard`);
+    }
+  }, [status, session]);
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 ">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">

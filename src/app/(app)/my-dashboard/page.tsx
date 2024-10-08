@@ -12,6 +12,7 @@ import { AxiosError } from "axios";
 import { Loader2, RefreshCcw } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -19,19 +20,18 @@ const Page = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [Loading, setLoading] = useState(false);
+  const router = useRouter();
   const [baseURL, setBaseURL] = useState("");
-  // const []
+
+  const { data: session } = useSession();
+
+  // Just a slight correction. It is Object destructuring with renaming. So data.user would also be fine if not renamed.
+  const { username } = (session?.user as User) || {};
 
   const form = useForm({ resolver: zodResolver(acceptMessageValidator) });
   const { register, watch, setValue } = form;
 
-  const { data: session } = useSession();
-  // Just a slight correction. It is Object destructuring with renaming. So data.user would also be fine if not renamed.
-  const { username } = (session?.user as User) || {};
-
   const acceptMessages = watch("acceptMessages");
-
-  console.log("acceptMessagessads");
 
   // -------------- delete messages -------------------
 
@@ -43,7 +43,7 @@ const Page = () => {
     setIsSwitchLoading(true);
     try {
       const response = await messageServices.isAcceptMessages();
-      setValue("acceptMessages", response?.data);
+      setValue("acceptMessages", Boolean(response?.data.data));
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
 
@@ -87,14 +87,13 @@ const Page = () => {
         setIsSwitchLoading(false);
       }
     },
-    [setLoading, setMessages]
+    [setMessages]
   );
 
   // -------------- user switch accepting messages ----------------
 
   const handleSwitchChange = async () => {
     try {
-      console.log("acceptMessages", acceptMessages);
 
       const response = await messageServices.switchAcceptMessages({
         acceptMessages: !acceptMessages,
@@ -126,12 +125,21 @@ const Page = () => {
   // -------------- useeffect ----------------
 
   useEffect(() => {
-    if (!session || !session.user) return;
+    if (!session || !session.user) {
+      toast({
+        title: "Please login",
+        description: "login to access the dashboard",
+        variant: "destructive",
+      });
+      router.replace(`/sign-in`);
+      return;
+    }
 
     fetchMessages();
     fetchAcceptMessage();
+
     setBaseURL(`${window.location.protocol}//${window.location.host}`);
-  }, [session, setValue, fetchAcceptMessage, fetchMessages]);
+  }, [session]);
 
   if (!session || !session.user) {
     return <div>Please login</div>;
@@ -156,7 +164,10 @@ const Page = () => {
         <Switch
           {...register("acceptMessages")}
           checked={acceptMessages}
-          onCheckedChange={handleSwitchChange}
+          onCheckedChange={(checked) => {
+            setValue("acceptMessages", checked); // manually set value on change
+            handleSwitchChange(); // call your switch handler
+          }}
           disabled={isSwitchLoading}
         />
         <span className="ml-2">
@@ -194,5 +205,4 @@ const Page = () => {
     </div>
   );
 };
-
 export default Page;

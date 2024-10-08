@@ -10,10 +10,11 @@ export async function sendVerificationEmail(
   try {
     await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: email,
+      to: email.trim(),
       subject: "Silent Sandesh || Verification Code ",
       react: VerificationEmail({ username, otp: verifyCode }),
     });
+
     return { success: false, message: "failed to send mail" };
   } catch (error) {
     console.log("Error in sending mail", error);
