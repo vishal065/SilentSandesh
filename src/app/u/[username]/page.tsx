@@ -111,12 +111,12 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-start justify-center mt-10 lg:mx-auto p-6  w-full max-w-6xl">
+    <div className="flex flex-col items-start justify-center mt-10 lg:mx-auto p-4 md:p-6  w-full max-w-6xl text-xs sm:text-sm md:text-base">
       <h1 className="text-xl lg:text-4xl font-extrabold mb-6 place-self-center  ">
         Public Profile Link
       </h1>
-      <div className="text-base font-semibold tracking-tight w-full">
-        <div className="flex flex-col w-full items-center justify-center space-y-4 mx-auto p-16 ">
+      <div className=" font-semibold tracking-tight w-full">
+        <div className="flex flex-col w-full items-center justify-center space-y-4 mx-auto sm:p-8 md:p-10 lg:p-16 ">
           <p className="place-self-start ">
             Send Anonymous Message to @{username}
           </p>
@@ -137,25 +137,30 @@ const Page = () => {
                   message: "message must be less then 100 characters",
                 },
               })}
-              className="input border-2  input-bordered place-self-start  pt-3 px-3 pb-20 w-full rounded-xl text-left align-text-top"
+              className="input border-2  input-bordered place-self-start  pt-3 px-3 pb-20 w-full rounded-xl text-left align-text-top "
               placeholder="Write your anonymous message here"
             />
             {errors.message?.message && <p>{String(errors.message.message)}</p>}
             <Button
-              className="mt-2 w-32 text-lg place-self-center"
+              className="mt-2 w-16 sm:w-20 lg:w-32  lg:text-lg place-self-center"
               type="submit"
             >
               Send
             </Button>
           </form>
         </div>
-        <div className="p-4 ml-10 space-y-4">
-          <Button onClick={suggestMessage}>Suggest Message</Button>
+        <div className="p-4  space-y-4">
+          <Button
+            className="w-24 md:w-28 lg:w-32 xl:w-36  text-xs  lg:text-base px-4 font-light md:font-medium"
+            onClick={suggestMessage}
+          >
+            Suggest Message
+          </Button>
           <Separator />
-          <p>Click on any message below to select it.</p>
-          <div className="p-4 m-2 font-bold border rounded-md ">
+          <p className="ml-4">Click on any message below to select it.</p>
+          <div className="p-4 md:m-2 font-bold border rounded-md ">
             <h2 className="ml-4 font-semibold text-xl">Messages</h2>
-            <div className=" p-4 space-y-4">
+            <div className=" p-2 sm:p-4 space-y-4">
               {loadingSuggestMessage ? (
                 <div className="flex flex-col w-full justify-center items-center space-y-2">
                   <div className="flex flex-col w-full h-12 border items-center justify-center">

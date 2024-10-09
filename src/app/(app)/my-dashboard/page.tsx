@@ -94,7 +94,6 @@ const Page = () => {
 
   const handleSwitchChange = async () => {
     try {
-
       const response = await messageServices.switchAcceptMessages({
         acceptMessages: !acceptMessages,
       });
@@ -146,7 +145,7 @@ const Page = () => {
   }
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+    <div className="my-8 mx-2 sm:mx-3  md:mx-8 lg:mx-auto px-4 md:p-6 bg-white/70 rounded w-full max-w-6xl text-black">
       <h1 className="text-4xl font-bold mb-2">User Dashboard</h1>
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
@@ -155,9 +154,14 @@ const Page = () => {
             type="text"
             value={ProfileUrl}
             disabled
-            className="input input-bordered outline w-full p-2 mr-2"
+            className="input input-bordered outline w-full p-2 mr-2  text-xs md:text-base"
           />
-          <Button onClick={copyToClipboard}>Copy</Button>
+          <Button
+            className="mx-2 text-sm md:text-base"
+            onClick={copyToClipboard}
+          >
+            Copy
+          </Button>
         </div>
       </div>
       <div className="mb-4">
@@ -176,7 +180,7 @@ const Page = () => {
       </div>
       <Separator />
       <Button
-        className="mt-4"
+        className="my-4 text-white  "
         variant="outline"
         onClick={(e) => {
           e.preventDefault();
@@ -189,19 +193,22 @@ const Page = () => {
           <RefreshCcw className="h-4 w-4" />
         )}
       </Button>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {(messages?.length as number) > 0 ? (
-          messages?.map((message, i) => (
-            <MessageCard
-              key={i}
-              message={message}
-              onMessageDelete={handleDeleteMessage}
-            />
-          ))
-        ) : (
-          <p>No message to display.</p>
-        )}
-      </div>
+      <main className="flex-grow container mx-auto p-4">
+        <h2 className="text-3xl font-bold mb-6">All Messages</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {(messages?.length as number) > 0 ? (
+            messages?.map((message, i) => (
+              <MessageCard
+                key={i}
+                message={message}
+                onMessageDelete={handleDeleteMessage}
+              />
+            ))
+          ) : (
+            <p className="">No message to display.</p>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
