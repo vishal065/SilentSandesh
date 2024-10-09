@@ -15,16 +15,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
+  const [redirect, setRedirect] = useState<boolean>(false);
+
+  const { data: session, status } = useSession();
+  // Just a slight correction. It is Object destructuring with renaming. So data.user would also be fine if not renamed.
+
+  const user: User = session?.user as User;
+
+  const router = useRouter();
+
   const [path] = useState<boolean>(
     window?.location.pathname?.startsWith(`/u/`) ||
       window?.location.pathname === `/`
   );
-
-  const [redirect, setRedirect] = useState<boolean>(false);
-  const { data: session, status } = useSession();
-  const user: User = session?.user as User;
-  // Just a slight correction. It is Object destructuring with renaming. So data.user would also be fine if not renamed.
-  const router = useRouter();
 
   const { setTheme } = useTheme();
 
@@ -32,13 +35,13 @@ const Navbar = () => {
     if (redirect) {
       router.replace(`/sign-in`);
     }
-  }, [signOut]);
+  }, [redirect, router]);
 
   useEffect(() => {
     if (session) {
       router.replace(`/my-dashboard`);
     }
-  }, [session]);
+  }, [session, router]);
 
   return (
     <nav className="px-2 md:px-4  lg:px-6 py-6 shadow-md">

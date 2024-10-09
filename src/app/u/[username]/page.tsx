@@ -174,7 +174,7 @@ const Page = () => {
                   </div>
                 </div>
               ) : (
-                suggestedMessage.map((data, i) => (
+                suggestedMessage?.map((data, i) => (
                   <p
                     key={i}
                     onClick={() => setValue("message", data)}

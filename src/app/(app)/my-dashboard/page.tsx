@@ -138,7 +138,7 @@ const Page = () => {
     fetchAcceptMessage();
 
     setBaseURL(`${window.location.protocol}//${window.location.host}`);
-  }, [session]);
+  }, [session, fetchAcceptMessage, fetchMessages, router]);
 
   if (!session || !session.user) {
     return <div>Please login</div>;

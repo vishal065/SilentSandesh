@@ -67,7 +67,7 @@ const Page = () => {
     if (!session === null && status == "authenticated") {
       router.replace(`/my-dashboard`);
     }
-  }, [status, session]);
+  }, [status, session,router]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-200   text-black  ">
