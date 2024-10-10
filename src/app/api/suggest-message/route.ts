@@ -1,9 +1,9 @@
 // import { createGoogleGenerativeAI } from "@ai-sdk/google";
-// import apiResponse from "@/helpers/apiResponse";
+import apiResponse from "@/helpers/apiResponse";
 import { google } from "@ai-sdk/google";
-import { streamText } from "ai";
+import { generateText } from "ai";
 
-export async function GET() {
+export async function POST() {
   try {
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY!;
 
@@ -17,39 +17,38 @@ export async function GET() {
     const prompt = `Create a list of three random open-ended and engaging questions randomness depend on this number ${randomNumber} formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment. `;
 
     const model = google("gemini-1.0-pro-latest");
-    // const text = await generateText({
-    //   model,
-    //   prompt,
-    //   maxTokens: 150,
-    // });
-    // console.log(text.text);
-
-    const result = await streamText({
+    const text = await generateText({
       model,
       prompt,
-      maxTokens: 200,
+      maxTokens: 150,
     });
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        for await (const textPart of result.textStream) {
-          const encoder = new TextEncoder();
-          const chunk = encoder.encode(textPart);
-          controller.enqueue(chunk);
-        }
-        controller.close();
-      },
-    });
+    // const result = await streamText({
+    //   model,
+    //   prompt,
+    //   maxTokens: 200,
+    // });
 
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/plain",
-        "Cache-Control": "no-cache",
-        "Transfer-Encoding": "chunked",
-      },
-    });
+    // const stream = new ReadableStream({
+    //   async start(controller) {
+    //     for await (const textPart of result.textStream) {
+    //       const encoder = new TextEncoder();
+    //       const chunk = encoder.encode(textPart);
+    //       controller.enqueue(chunk);
+    //     }
+    //     controller.close();
+    //   },
+    // });
 
-    // return apiResponse(true, "few suggested message", 200, text.text);
+    // return new Response(stream, {
+    //   headers: {
+    //     "Content-Type": "text/plain",
+    //     "Cache-Control": "no-cache",
+    //     "Transfer-Encoding": "chunked",
+    //   },
+    // });
+
+    return apiResponse(true, "few suggested message", 200, text.text);
     //  return Response.json({ text: text.text }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
@@ -57,6 +56,25 @@ export async function GET() {
     }
   }
 }
+
+// const stream = new ReadableStream({
+//   async start(controller) {
+//     try {
+//       const encoder = new TextEncoder();
+//       if (Array.isArray(resultStream.textStream)) {
+//         for await (const textPart of resultStream.textStream) {
+//           const chunk = encoder.encode(textPart);
+//           controller.enqueue(chunk);
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error during streaming:", error);
+//       controller.error(error); // Handle error appropriately
+//     } finally {
+//       controller.close();
+//     }
+//   },
+// });
 
 // export default async function GET() {
 //   try {

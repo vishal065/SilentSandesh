@@ -13,7 +13,6 @@ export async function POST(req: Request) {
       username,
       isVerified: true,
     });
-    console.log(existingUserVerifiedByUsername);
 
     if (
       existingUserVerifiedByUsername &&
@@ -68,7 +67,6 @@ export async function POST(req: Request) {
       username,
       verifyCode
     );
-    console.log(emailResponse);
     
     if (!emailResponse.success) {
       return Response.json({

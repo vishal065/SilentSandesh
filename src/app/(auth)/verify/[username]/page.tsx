@@ -31,14 +31,10 @@ function Page() {
   const onSubmit = async (data: z.infer<typeof verifyCodeValidator>) => {
     setIsSubmitting(true);
     try {
-      console.log("before req");
-      console.log("username", params.username, "data", data.code);
-
       const response = await axios.post(`/api/verify-code`, {
         username: params.username,
         verifyCode: data.code,
       });
-      console.log("after req", response);
 
       toast({
         title: "success",

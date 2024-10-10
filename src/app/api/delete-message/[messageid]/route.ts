@@ -17,8 +17,6 @@ export async function DELETE(
     return apiResponse(false, "Not Authenticated", 400);
   }
   try {
-    console.log("messageID", messageID);
-
     const DeletedMessage = await UserModel.updateOne(
       { _id: user._id },
       { $pull: { messages: { _id: messageID } } }

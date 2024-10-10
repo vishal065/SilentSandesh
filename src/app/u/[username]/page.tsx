@@ -12,6 +12,7 @@ import questions from "@/Data/suggestMessage";
 const Page = () => {
   const { username } = useParams<{ username: string }>();
   const [loadingSuggestMessage, setLoadingSuggestMessage] = useState(false);
+  // const [Chunk, setChunk] = useState<string>("");
   const [suggestedMessage, setSuggestedMessage] = useState<string[]>([]);
   const {
     register,
@@ -32,38 +33,45 @@ const Page = () => {
   const suggestMessage = async () => {
     setLoadingSuggestMessage(true);
     setSuggestedMessage([]);
+    // setChunk("");
+    // try {
+    //   const response = await fetch("/api/suggest-message", {
+    //     method: "POST",
+    //   });
+    //   if (!response.body) {
+    //     throw new Error(
+    //       "ReadableStream is not supported by the browser or the response body is null."
+    //     );
+    //   }
+    //   const reader = response?.body.getReader();
+
+    //   const decoder = new TextDecoder();
+
+    //   let done = false;
+
+    //   while (!done) {
+    //     const { value, done: doneReading } = await reader.read();
+    //     done = doneReading;
+
+    //     const chunk = decoder.decode(value, { stream: true });
+    //     setChunk((prev) => prev + chunk);
+
+    //     setSuggestedMessage(Chunk?.split("||"));
+    //     console.log(suggestedMessage);
+    //   }
+    // } catch (error) {
+    // } finally {
+    //   setLoadingSuggestMessage(false);
+    // }
     try {
       const response = await fetch("/api/suggest-message", {
-        method: "GET",
+        method: "POST",
       });
-      if (!response.body) {
-        throw new Error(
-          "ReadableStream is not supported by the browser or the response body is null."
-        );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const reader = response?.body.getReader();
-      console.log("reader", reader);
-
-      const decoder = new TextDecoder();
-      console.log("decoder", decoder);
-
-      let done = false;
-      console.log("done", done);
-      let data = "";
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        console.log("value", value);
-
-        const chunk = decoder.decode(value, { stream: true });
-        console.log("chunk", chunk);
-
-        data += chunk;
-
-        // setSuggestedMessage((prevText) => prevText + chunk);
-      }
-
-      setSuggestedMessage(data.split("||"));
+      const data = await response.json();
+      setSuggestedMessage(data.data.split("||"));
     } catch (error) {
     } finally {
       setLoadingSuggestMessage(false);

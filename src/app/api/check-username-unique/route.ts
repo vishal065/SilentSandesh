@@ -16,10 +16,6 @@ export async function GET(req: Request) {
 
     const result = UsernameValidator.safeParse(queryParams);
 
-    console.log("searchParams", searchParams);
-    console.log("queryParams", queryParams);
-    // console.log("queryParams 2", queryParams2);
-
     if (!result.success) {
       //   return Response.json({ message: "invalid Username" }, { status: 400 });
       const usernameError = result.error.format().username?._errors || [];
@@ -39,8 +35,6 @@ export async function GET(req: Request) {
       username: queryParams.username,
       isVerified: true,
     });
-
-    console.log(existingVerifiedUser);
 
     if (existingVerifiedUser) {
       return Response.json(
