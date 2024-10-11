@@ -8,6 +8,8 @@ export async function sendVerificationEmail(
   verifyCode: string
 ): Promise<ApiResponse> {
   try {
+    console.log("api key", process.env.RESEND_API_KEY);
+
     const response = await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email.trim(),
