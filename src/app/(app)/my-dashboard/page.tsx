@@ -145,7 +145,7 @@ const Page = () => {
   }
 
   return (
-    <div className="my-8 mx-2 sm:mx-3  md:mx-8 lg:mx-auto px-4 md:p-6 bg-white/70 rounded w-full max-w-6xl text-black">
+    <div className="my-8 mx-2 sm:mx-3  md:mx-8 lg:mx-auto px-4 md:p-6 bg-white/80 rounded w-full max-w-6xl text-black">
       <h1 className="text-4xl font-bold mb-2">User Dashboard</h1>
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
