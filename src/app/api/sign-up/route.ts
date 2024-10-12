@@ -1,6 +1,7 @@
-import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+// import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User.model";
+import { SendMailTemplate } from "@/templates/sendOTP-nodemailer";
 import bcrypt from "bcrypt";
 // import { ApiResponse } from "@/types/ApiResponse";
 // import { NextRequest, NextResponse } from "next/server";
@@ -62,20 +63,23 @@ export async function POST(req: Request) {
       await newUser.save();
     }
     //send verification email
-    const emailResponse = await sendVerificationEmail(
-      email,
-      username,
-      verifyCode
-    );
-    console.log("emailResponse", emailResponse);
+    const template = {
+      url: "sendOTP-nodemailer.ejs",
+      userName: username,
+      title: "new",
+      OTP: verifyCode,
+      hour: 1,
+    };
+    const emailResponse = await SendMailTemplate(email, template);
 
-    if (!emailResponse.success) {
+    if (!emailResponse) {
       return Response.json({
         status: 500,
         success: false,
-        message: emailResponse.message,
+        message: "Failed to send OTP",
       });
     }
+
     return Response.json({
       status: 201,
       success: true,
