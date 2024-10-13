@@ -41,7 +41,10 @@ const Navbar = () => {
   }, [redirect, router]);
 
   useEffect(() => {
-    if (session) {
+    if (
+      (session && window?.location.pathname === `/sign-up`) ||
+      window?.location.pathname === `/sign-in`
+    ) {
       router.replace(`/my-dashboard`);
     }
   }, [session, router]);
