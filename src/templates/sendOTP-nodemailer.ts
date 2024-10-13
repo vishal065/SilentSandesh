@@ -34,6 +34,7 @@ export async function SendMailTemplate(email: string, template: templateProp) {
     console.log("__dirname is ", __dirname);
 
     const templatePath = path.join(__dirname, template.url); //(__dirname,"inner folder if any", template.url);
+    console.log("template object", template);
     console.log("templatePath is ", templatePath);
 
     const templatefile = fs.readFileSync(templatePath, "utf-8");

@@ -9,7 +9,12 @@ import bcrypt from "bcrypt";
 export async function POST(req: Request) {
   await dbConnect();
   try {
-    const { username, email, password } = await req.json();
+    const data = await req.json();
+    // const { username, email, password } = await req.json();
+    const username: string = data.username.toString().toLowerCase();
+    const email = data.email.toString().toLowerCase();
+    const password = data.password;
+
     const existingUserVerifiedByUsername = await UserModel.find({
       username,
       isVerified: true,
