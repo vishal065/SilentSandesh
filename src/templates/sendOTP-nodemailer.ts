@@ -37,6 +37,7 @@ export async function SendMailTemplate(email: string, template: templateProp) {
       },
       debug: true,
     });
+    console.log("mailtransporter", mailtransporter);
 
     // Recreate __dirname behavior in ES module
     // const __filename = fileURLToPath(import.meta.url);
