@@ -15,17 +15,26 @@ type templateProp = {
 export async function SendMailTemplate(email: string, template: templateProp) {
   try {
     console.log("process.env.AUTH_MAIL ", process.env.AUTH_MAIL);
+    console.log("process.env.AUTH_MAIL ", typeof process.env.AUTH_MAIL);
     console.log("process.env.AUTH_PASS ", process.env.AUTH_PASS);
+    console.log("process.env.AUTH_PASS ", typeof process.env.AUTH_PASS);
+    const AUTH_MAIL = process.env.AUTH_MAIL;
+    const AUTH_PASS = process.env.AUTH_PASS;
+    console.log("process.env.AUTH_PASS ", AUTH_MAIL);
+    console.log("process.env.AUTH_PASS ", typeof AUTH_MAIL);
+    console.log("process.env.AUTH_PASS ", AUTH_PASS);
+    console.log("process.env.AUTH_PASS ", typeof AUTH_PASS);
+
     const mailtransporter = mailer.createTransport({
       service: "gmail",
-      secure: true,
+      secure: false,
       auth: {
-        user: process.env.AUTH_MAIL,
-        pass: process.env.AUTH_PASS,
+        user: AUTH_MAIL,
+        pass: AUTH_PASS,
       },
-      // tls: {
-      //   rejectUnauthorized: false,
-      // },
+      tls: {
+        rejectUnauthorized: false,
+      },
       debug: true,
     });
 
