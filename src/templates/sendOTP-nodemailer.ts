@@ -2,7 +2,7 @@ import mailer from "nodemailer";
 import ejs from "ejs";
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 
 type templateProp = {
   url: string;
