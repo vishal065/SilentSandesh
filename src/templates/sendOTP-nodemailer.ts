@@ -45,11 +45,11 @@ export async function SendMailTemplate(email: string, template: templateProp) {
     );
     console.log("absoulte path ", absoulutePath);
 
-    const templatesDir = path.join(__dirname, "src", "templates");
+    // const templatesDir = path.join(__dirname, "src", "templates");
 
-    console.log("Templates directory:", fs.readdirSync(templatesDir));
+    // console.log("Templates directory:", fs.readdirSync(templatesDir));
 
-    const templatefile = fs.readFileSync(templatePath, "utf-8");
+    const templatefile = fs.readFileSync(absoulutePath, "utf-8");
     console.log("templatefile is ", templatefile);
 
     const html = ejs.render(templatefile, template);
