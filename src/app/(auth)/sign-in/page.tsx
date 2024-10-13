@@ -6,6 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
@@ -67,7 +68,7 @@ const Page = () => {
     if (!session === null && status == "authenticated") {
       router.replace(`/my-dashboard`);
     }
-  }, [status, session,router]);
+  }, [status, session, router]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-200   text-black  ">
@@ -92,18 +93,20 @@ const Page = () => {
                   <FormControl>
                     <Input placeholder="Email/username" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
-              name="password"
               control={signInForm.control}
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>password</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="password" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

@@ -25,29 +25,26 @@ const Navbar = () => {
   const router = useRouter();
 
   const [isClient, setIsClient] = useState(false);
-  const [path, setPath] = useState<boolean>(false);
 
   const { setTheme } = useTheme();
 
   useEffect(() => {
     setIsClient(true); // The component is now rendered in the browser
-    setPath(
-      window?.location.pathname?.startsWith(`/u/`) ||
-        window?.location.pathname === `/`
-    );
-    if (redirect) {
+
+    if (redirect && !session) {
       router.replace(`/sign-in`);
     }
-  }, [redirect, router]);
 
-  useEffect(() => {
     if (
-      (session && window?.location.pathname === `/sign-up`) ||
+      (session &&
+        window?.location.pathname !== `/my-dashboard` &&
+        !window?.location.pathname?.startsWith(`/u/`)) ||
+      window?.location.pathname === `/sign-up` ||
       window?.location.pathname === `/sign-in`
     ) {
       router.replace(`/my-dashboard`);
     }
-  }, [session, router]);
+  }, [redirect, router, session]);
 
   return (
     <>
@@ -83,20 +80,18 @@ const Navbar = () => {
                   </div>
                 </>
               ) : (
-                path && (
-                  <div className="flex  gap-1 md:gap-4 lg:gap-8">
-                    <Link href={`/sign-up`}>
-                      <Button className="w-[75%] md:w-auto text-xs md:text-base font-medium md:font-normal">
-                        Signup
-                      </Button>
-                    </Link>
-                    <Link href={`/sign-in`}>
-                      <Button className="w-[75%] md:w-auto text-xs md:text-base font-medium md:font-normal">
-                        Login
-                      </Button>
-                    </Link>
-                  </div>
-                )
+                <div className="flex  gap-1 md:gap-4 lg:gap-8">
+                  <Link href={`/sign-up`}>
+                    <Button className="w-[75%] md:w-auto text-xs md:text-base font-medium md:font-normal">
+                      Signup
+                    </Button>
+                  </Link>
+                  <Link href={`/sign-in`}>
+                    <Button className="w-[75%] md:w-auto text-xs md:text-base font-medium md:font-normal">
+                      Login
+                    </Button>
+                  </Link>
+                </div>
               )}
 
               <DropdownMenu>

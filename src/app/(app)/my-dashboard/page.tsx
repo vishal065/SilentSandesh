@@ -125,12 +125,6 @@ const Page = () => {
 
   useEffect(() => {
     if (!session || !session.user) {
-      toast({
-        title: "Please login",
-        description: "login to access the dashboard",
-        variant: "destructive",
-      });
-      router.replace(`/sign-in`);
       return;
     }
 
