@@ -37,10 +37,6 @@ export async function SendMailTemplate(email: string, template: templateProp) {
     console.log("template object", template);
     console.log("templatePath is ", templatePath);
 
-    const templatesDir = path.join(__dirname, "src", "templates");
-
-    console.log("Templates directory:", fs.readdirSync(templatesDir));
-
     const absoulutePath = path.join(
       process.cwd(),
       "src",
@@ -48,6 +44,10 @@ export async function SendMailTemplate(email: string, template: templateProp) {
       "sendOTP-nodemailer.ejs"
     );
     console.log("absoulte path ", absoulutePath);
+
+    const templatesDir = path.join(__dirname, "src", "templates");
+
+    console.log("Templates directory:", fs.readdirSync(templatesDir));
 
     const templatefile = fs.readFileSync(templatePath, "utf-8");
     console.log("templatefile is ", templatefile);
