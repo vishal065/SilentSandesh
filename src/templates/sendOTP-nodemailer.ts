@@ -14,19 +14,19 @@ type templateProp = {
 
 export async function SendMailTemplate(email: string, template: templateProp) {
   try {
-     console.log("process.env.AUTH_MAIL ", process.env.AUTH_MAIL);
-     console.log("process.env.AUTH_PASS ", process.env.AUTH_PASS);
+    console.log("process.env.AUTH_MAIL ", process.env.AUTH_MAIL);
+    console.log("process.env.AUTH_PASS ", process.env.AUTH_PASS);
     const mailtransporter = mailer.createTransport({
       service: "gmail",
-      secure: false,
+      secure: true,
       auth: {
         user: process.env.AUTH_MAIL,
         pass: process.env.AUTH_PASS,
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
-      debug: true, 
+      // tls: {
+      //   rejectUnauthorized: false,
+      // },
+      debug: true,
     });
 
     // Recreate __dirname behavior in ES module
