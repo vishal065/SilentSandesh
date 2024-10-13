@@ -15,8 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
-  const [redirect, setRedirect] = useState<boolean>(false);
-
   const { data: session, status } = useSession();
   // Just a slight correction. It is Object destructuring with renaming. So data.user would also be fine if not renamed.
 
@@ -31,7 +29,7 @@ const Navbar = () => {
   useEffect(() => {
     setIsClient(true); // The component is now rendered in the browser
 
-    if (redirect && !session) {
+    if (!session && window?.location.pathname === `/my-dashboard`) {
       router.replace(`/sign-in`);
     }
 
@@ -44,7 +42,7 @@ const Navbar = () => {
     ) {
       router.replace(`/my-dashboard`);
     }
-  }, [redirect, router, session]);
+  }, [router, session]);
 
   return (
     <>
@@ -70,9 +68,12 @@ const Navbar = () => {
                     )}
                     <Button
                       className="w-[75%] md:w-auto text-xs md:text-base font-medium md:font-normal"
-                      onClick={() => {
-                        signOut();
-                        setRedirect(true);
+                      onClick={async () => {
+                        const data = await signOut({
+                          redirect: false,
+                          callbackUrl: "/",
+                        });
+                        router.push(data.url); // Redirect without page reload
                       }}
                     >
                       Logout
