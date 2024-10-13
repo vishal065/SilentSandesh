@@ -25,10 +25,8 @@ export async function SendMailTemplate(email: string, template: templateProp) {
       // tls: {
       //   rejectUnauthorized: false,
       // },
-      debug: true,
+      // debug: true,
     });
-    console.log("mailtransporter", mailtransporter);
-
     // Recreate __dirname behavior in ES module
     // const __filename = fileURLToPath(import.meta.url);
 
@@ -57,7 +55,6 @@ export async function SendMailTemplate(email: string, template: templateProp) {
     };
 
     const resp = await mailtransporter.sendMail(mailingdetail);
-    console.log("resp is ", resp);
 
     return resp;
   } catch (error) {
