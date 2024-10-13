@@ -38,7 +38,7 @@ export async function SendMailTemplate(email: string, template: templateProp) {
       process.cwd(),
       "src",
       "templates",
-      template.url
+      "sendOTP-nodemailer.ejs"
     );
     console.log("absoulte path ", absoulutePath);
 
