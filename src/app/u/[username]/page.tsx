@@ -67,7 +67,6 @@ const Page = () => {
       const response = await fetch("/api/suggest-message", {
         method: "POST",
       });
-      console.log("response", response);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

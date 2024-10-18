@@ -22,7 +22,7 @@ export async function POST() {
       prompt,
       maxTokens: 150,
     });
-    console.log(text.text);
+    console.log(text?.text);
 
     // const result = await streamText({
     //   model,
@@ -49,7 +49,7 @@ export async function POST() {
     //   },
     // });
 
-    return apiResponse(true, "few suggested message", 200, text.text);
+    return apiResponse(true, "few suggested message", 200, text?.text);
     //  return Response.json({ text: text.text }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
