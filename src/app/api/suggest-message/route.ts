@@ -22,6 +22,7 @@ export async function POST() {
       prompt,
       maxTokens: 150,
     });
+    console.log(text.text);
 
     // const result = await streamText({
     //   model,
