@@ -8,8 +8,6 @@ export async function sendVerificationEmail(
   verifyCode: string
 ): Promise<ApiResponse> {
   try {
-    console.log("api key", process.env.RESEND_API_KEY);
-
     const response = await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email.trim(),
@@ -20,7 +18,7 @@ export async function sendVerificationEmail(
 
     return { success: false, message: "failed to send mail" };
   } catch (error) {
-    console.log("Error in sending mail", error);
+    console.error("Error in sending mail", error);
     return { success: false, message: "error in sending mail" };
   }
 }

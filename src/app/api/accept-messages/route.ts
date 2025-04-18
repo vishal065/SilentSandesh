@@ -94,7 +94,7 @@ export const GET = async () => {
       user?.isAcceptingMessages
     );
   } catch (err: unknown) {
-    console.log("user not received messages !!");
+    console.error("user not received messages !!");
     return apiError(false, "something went wrong", 400);
   }
 };

@@ -12,17 +12,16 @@ export async function POST() {
         "API key is missing. Set it as GOOGLE_GENERATIVE_AI_API_KEY."
       );
     }
-    const randomNumber = Math.floor(100000 + Math.random() * 900000);
+    // const randomNumber = Math.floor(100000 + Math.random() * 900000);
 
-    const prompt = `Create a list of three random open-ended and engaging questions randomness depend on this number ${randomNumber} formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment. `;
+    const prompt = `Create a list of three random open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment. `;
 
-    const model = google("gemini-1.0-pro-latest");
+    const model = google(process.env.GEMINI_MODEL! ?? "gemini-2.0-flash-001");
     const text = await generateText({
       model,
       prompt,
-      maxTokens: 150,
+      maxTokens: 100,
     });
-    console.log(text?.text);
 
     // const result = await streamText({
     //   model,

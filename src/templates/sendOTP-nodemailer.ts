@@ -2,6 +2,7 @@ import mailer from "nodemailer";
 import ejs from "ejs";
 import path from "path";
 import fs from "fs";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 // import { fileURLToPath } from "url";
 
 type templateProp = {
@@ -14,18 +15,20 @@ type templateProp = {
 
 export async function SendMailTemplate(email: string, template: templateProp) {
   try {
-
-    const mailtransporter = mailer.createTransport({
+    const mailtransporter: mailer.Transporter<
+      SMTPTransport.SentMessageInfo,
+      SMTPTransport.Options
+    > = mailer.createTransport({
       service: "gmail",
       secure: true,
       auth: {
         user: process.env.AUTH_MAIL,
         pass: process.env.AUTH_PASS,
       },
-      // tls: {
-      //   rejectUnauthorized: false,
-      // },
-      // debug: true,
+      tls: {
+        rejectUnauthorized: false,
+      },
+      debug: true,
     });
     // Recreate __dirname behavior in ES module
     // const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +44,7 @@ export async function SendMailTemplate(email: string, template: templateProp) {
       "templates",
       "sendOTP-nodemailer.ejs"
     );
-    console.log("absoulte path ", absoulutePath);
+  
 
     const templatefile = fs.readFileSync(absoulutePath, "utf-8");
 

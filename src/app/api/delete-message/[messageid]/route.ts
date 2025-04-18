@@ -26,7 +26,7 @@ export async function DELETE(
     }
     return apiResponse(true, "Deleted message successfully", 200);
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     apiError(false, "Failed to delete message", 500);
   }
