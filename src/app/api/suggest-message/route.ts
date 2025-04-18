@@ -51,6 +51,8 @@ export async function POST() {
     return apiResponse(true, "few suggested message", 200, text?.text);
     //  return Response.json({ text: text.text }, { status: 200 });
   } catch (error) {
+    console.error(error);
+
     if (error instanceof Error) {
       return Response.json({ error: error.message }, { status: 500 });
     }
