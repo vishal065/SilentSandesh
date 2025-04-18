@@ -52,8 +52,9 @@ export async function POST() {
     //  return Response.json({ text: text.text }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      Response.json({ error: error.message }, { status: 500 });
+      return Response.json({ error: error.message }, { status: 500 });
     }
+    return Response.json({ error: "Unknown error occurred" }, { status: 500 });
   }
 }
 
